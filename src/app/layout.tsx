@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Syne, DM_Sans } from "next/font/google";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { GoogleAnalytics } from "@/components/seo/GoogleAnalytics";
 import {
   defaultDescription,
   defaultKeywords,
@@ -97,6 +98,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${syne.variable} ${dmSans.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
+        <GoogleAnalytics />
         <JsonLd data={[organizationJsonLd(), websiteJsonLd(), localBusinessJsonLd()]} />
         {children}
       </body>

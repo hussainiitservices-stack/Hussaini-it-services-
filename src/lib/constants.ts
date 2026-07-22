@@ -293,5 +293,6 @@ export const companyInfo = {
   email: "hello@hussainitservices.com",
   phone: "+971 56 524 2459",
   location: "High Wycombe, UK & Ujjain, India",
-  website: "https://hussainitservices.com",
+  // Must match the primary domain used in Google Search Console (www)
+  website: "https://www.hussainiitservices.com",
 };

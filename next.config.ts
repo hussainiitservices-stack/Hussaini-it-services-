@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "hussainiitservices.com" }],
+        destination: "https://www.hussainiitservices.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

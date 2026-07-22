@@ -6,16 +6,11 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/llm.txt", "/sitemap.txt"],
-        disallow: ["/admin/", "/api/"],
-      },
-      {
-        userAgent: ["GPTBot", "ChatGPT-User", "ClaudeBot", "Google-Extended", "PerplexityBot"],
-        allow: ["/", "/llm.txt", "/sitemap.txt"],
+        allow: "/",
         disallow: ["/admin/", "/api/"],
       },
     ],
+    // Do not set `host` — Googlebot ignores it (Yandex-only) and Search Console warns.
     sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
   };
 }

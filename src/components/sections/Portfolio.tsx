@@ -67,7 +67,7 @@ export function Portfolio() {
 
         <RevealOnScroll className="mt-12 text-center">
           <a
-            href="https://hussainiitservices.com/portfolio"
+            href="https://www.hussainiitservices.com/portfolio"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"

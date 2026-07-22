@@ -1,8 +1,29 @@
 import type { Metadata } from "next";
 import { companyInfo } from "@/lib/constants";
 
-export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || companyInfo.website;
+/** Canonical production host — must match Google Search Console www property */
+const CANONICAL_SITE_URL = "https://www.hussainiitservices.com";
+
+function resolveSiteUrl() {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "").trim();
+  const candidate = fromEnv || companyInfo.website.replace(/\/$/, "");
+
+  // Force www so sitemap URLs match Search Console (www) property
+  try {
+    const url = new URL(candidate);
+    if (
+      url.hostname === "hussainiitservices.com" ||
+      url.hostname === "www.hussainiitservices.com"
+    ) {
+      return CANONICAL_SITE_URL;
+    }
+    return `${url.protocol}//${url.host}`;
+  } catch {
+    return CANONICAL_SITE_URL;
+  }
+}
+
+export const siteUrl = resolveSiteUrl();
 
 export const siteName = companyInfo.name;
 
