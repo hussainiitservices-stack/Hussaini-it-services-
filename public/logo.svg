@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="swoosh" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+  <path d="M60 8L104 34V86L60 112L16 86V34L60 8Z" fill="#0F2744" stroke="#1E3A5F" stroke-width="2"/>
+  <rect x="32" y="28" width="6" height="64" rx="1" fill="#2B5F8E"/>
+  <rect x="42" y="28" width="4" height="64" rx="1" fill="#3B7CB8"/>
+  <rect x="50" y="28" width="6" height="64" rx="1" fill="#1E4976"/>
+  <path d="M24 58C40 52 56 48 72 44C84 42 92 46 96 58C88 62 72 66 56 68C42 70 30 66 24 58Z" fill="url(#swoosh)"/>
+  <rect x="72" y="36" width="4" height="48" rx="1" fill="#5BA3D9"/>
+  <rect x="80" y="40" width="4" height="40" rx="1" fill="#7CB9E8"/>
+</svg>
