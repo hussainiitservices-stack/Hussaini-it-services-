@@ -112,7 +112,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={loading}
-        className="inline-flex items-center justify-center gap-2 rounded-md bg-accent px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-navy disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-navy disabled:opacity-50 sm:w-auto"
       >
         {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
         {loading ? "Sending..." : "Send Message"}

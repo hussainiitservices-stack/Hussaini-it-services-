@@ -13,8 +13,8 @@ export function HomeTestimonialsPreview({ items }: HomeTestimonialsPreviewProps)
   if (!items.length) return null;
 
   return (
-    <section className="relative border-t border-border bg-surface py-24">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section className="relative border-t border-border bg-surface py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           badge="Testimonials"
           title="What Our Clients Say"

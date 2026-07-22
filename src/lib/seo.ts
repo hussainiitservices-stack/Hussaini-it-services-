@@ -9,6 +9,36 @@ export const siteName = companyInfo.name;
 export const defaultDescription =
   "Premium web development, SEO, social media management, and Google Business Profile optimization. Transform your digital presence with Hussaini IT Services.";
 
+export const defaultKeywords = [
+  "Hussaini IT Services",
+  "web development UK",
+  "SEO agency UAE",
+  "digital marketing India",
+  "Google Business Profile optimization",
+  "social media management",
+  "ecommerce development",
+  "Next.js web agency",
+  "local SEO High Wycombe",
+  "web design Ujjain",
+];
+
+export const geoLocations = [
+  {
+    name: "High Wycombe, United Kingdom",
+    region: "GB-BKM",
+    placename: "High Wycombe",
+    position: "51.6286;-0.7482",
+    icbm: "51.6286, -0.7482",
+  },
+  {
+    name: "Ujjain, India",
+    region: "IN-MP",
+    placename: "Ujjain",
+    position: "23.1765;75.7885",
+    icbm: "23.1765, 75.7885",
+  },
+];
+
 export const publicRoutes = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
   { path: "/about", priority: 0.9, changeFrequency: "monthly" as const },
@@ -24,20 +54,52 @@ type PageMetaInput = {
   title: string;
   description: string;
   path: string;
+  keywords?: string[];
+  noindex?: boolean;
 };
 
 export function createPageMetadata({
   title,
   description,
   path,
+  keywords = [],
+  noindex = false,
 }: PageMetaInput): Metadata {
   const url = `${siteUrl}${path}`;
   const ogImage = `${siteUrl}/logo.svg`;
+  const mergedKeywords = [...new Set([...defaultKeywords, ...keywords])];
+  const primaryGeo = geoLocations[0];
 
   return {
     title,
     description,
-    alternates: { canonical: url },
+    keywords: mergedKeywords,
+    alternates: {
+      canonical: url,
+      languages: {
+        "en-GB": url,
+        "en-AE": url,
+        "en-IN": url,
+        "x-default": url,
+      },
+    },
+    robots: noindex
+      ? { index: false, follow: false }
+      : {
+          index: true,
+          follow: true,
+          googleBot: { index: true, follow: true, "max-image-preview": "large" },
+        },
+    authors: [{ name: siteName, url: siteUrl }],
+    creator: siteName,
+    publisher: siteName,
+    category: "technology",
+    other: {
+      "geo.region": primaryGeo.region,
+      "geo.placename": primaryGeo.placename,
+      "geo.position": primaryGeo.position,
+      ICBM: primaryGeo.icbm,
+    },
     openGraph: {
       title,
       description,
@@ -45,6 +107,7 @@ export function createPageMetadata({
       siteName,
       type: "website",
       locale: "en_GB",
+      alternateLocale: ["en_AE", "en_IN"],
       images: [{ url: ogImage, width: 1200, height: 630, alt: siteName }],
     },
     twitter: {
@@ -65,10 +128,33 @@ export function organizationJsonLd() {
     logo: `${siteUrl}/logo.svg`,
     email: companyInfo.email,
     telephone: companyInfo.phone,
-    areaServed: ["United Kingdom", "United Arab Emirates", "India"],
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: companyInfo.location,
+    description: defaultDescription,
+    areaServed: [
+      { "@type": "Country", name: "United Kingdom" },
+      { "@type": "Country", name: "United Arab Emirates" },
+      { "@type": "Country", name: "India" },
+    ],
+    address: [
+      {
+        "@type": "PostalAddress",
+        addressLocality: "High Wycombe",
+        addressRegion: "Buckinghamshire",
+        addressCountry: "GB",
+      },
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Ujjain",
+        addressRegion: "Madhya Pradesh",
+        addressCountry: "IN",
+      },
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: companyInfo.phone,
+      email: companyInfo.email,
+      contactType: "customer service",
+      areaServed: ["GB", "AE", "IN"],
+      availableLanguage: ["English", "Hindi"],
     },
     sameAs: [companyInfo.website],
   };
@@ -81,6 +167,7 @@ export function websiteJsonLd() {
     name: siteName,
     url: siteUrl,
     description: defaultDescription,
+    inLanguage: "en-GB",
     publisher: {
       "@type": "Organization",
       name: siteName,
@@ -100,7 +187,22 @@ export function localBusinessJsonLd() {
     email: companyInfo.email,
     telephone: companyInfo.phone,
     priceRange: "$$",
-    areaServed: ["GB", "AE", "IN"],
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 51.6286,
+      longitude: -0.7482,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "High Wycombe",
+      addressRegion: "Buckinghamshire",
+      addressCountry: "GB",
+    },
+    areaServed: [
+      { "@type": "Country", name: "United Kingdom" },
+      { "@type": "Country", name: "United Arab Emirates" },
+      { "@type": "Country", name: "India" },
+    ],
     serviceType: [
       "Web Development",
       "Search Engine Optimization",
@@ -108,6 +210,13 @@ export function localBusinessJsonLd() {
       "Google Business Profile Optimization",
       "Ecommerce Development",
       "Digital Marketing",
+      "Mobile App Development",
     ],
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "18:00",
+    },
   };
 }

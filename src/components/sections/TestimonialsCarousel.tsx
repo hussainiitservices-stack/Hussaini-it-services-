@@ -39,8 +39,8 @@ export function TestimonialsCarousel({ items }: TestimonialsCarouselProps) {
           </motion.div>
         </AnimatePresence>
 
-        <div className="mt-8 flex items-center justify-between">
-          <div className="flex gap-2">
+        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-2">
             {items.map((item, i) => (
               <button
                 key={item.id}
@@ -53,7 +53,7 @@ export function TestimonialsCarousel({ items }: TestimonialsCarouselProps) {
             ))}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 self-end sm:self-auto">
             <button
               onClick={prev}
               className="flex h-10 w-10 items-center justify-center rounded-md border border-border text-muted transition-colors hover:border-[#4BA3E3]/40 hover:text-foreground"

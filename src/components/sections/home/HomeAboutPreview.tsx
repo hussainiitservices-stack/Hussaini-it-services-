@@ -13,9 +13,9 @@ const steps = [
 
 export function HomeAboutPreview() {
   return (
-    <section className="relative py-24 border-t border-border">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <section className="relative border-t border-border py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <RevealOnScroll direction="right">
             <SectionHeader
               badge="About Us"
@@ -24,7 +24,7 @@ export function HomeAboutPreview() {
               align="left"
               className="mb-0"
             />
-            <p className="mt-6 text-muted leading-relaxed">
+            <p className="mt-6 text-sm leading-relaxed text-muted sm:text-base">
               From industrial B2B brands to ecommerce stores and hospitality businesses, we combine
               technical excellence with strategic marketing — on time, on budget, and with
               uncompromising quality.
@@ -33,10 +33,10 @@ export function HomeAboutPreview() {
           </RevealOnScroll>
 
           <RevealOnScroll direction="left" delay={0.15}>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {steps.map((item) => (
-                <div key={item.step} className="premium-card rounded-xl p-5">
-                  <span className="font-display text-xl font-bold text-accent/40">{item.step}</span>
+                <div key={item.step} className="premium-card rounded-xl p-4 sm:p-5">
+                  <span className="font-display text-lg font-bold text-accent/40 sm:text-xl">{item.step}</span>
                   <h3 className="mt-2 font-display text-sm font-semibold">{item.title}</h3>
                   <p className="mt-1 text-xs leading-relaxed text-muted">{item.desc}</p>
                 </div>

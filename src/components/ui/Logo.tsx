@@ -29,11 +29,11 @@ export function Logo({ className, showText = true, size = "md" }: LogoProps) {
         className="shrink-0"
       />
       {showText && (
-        <div className="hidden sm:block">
+        <div className="min-w-0">
           <span className={cn("font-display font-bold tracking-tight text-foreground", s.text)}>
             Hussaini
           </span>
-          <span className="block text-[10px] font-medium uppercase tracking-[0.2em] text-muted">
+          <span className="block text-[9px] font-medium uppercase tracking-[0.15em] text-muted sm:text-[10px] sm:tracking-[0.2em]">
             IT Services
           </span>
         </div>

@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Syne, DM_Sans } from "next/font/google";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   defaultDescription,
+  defaultKeywords,
+  geoLocations,
   localBusinessJsonLd,
   organizationJsonLd,
   siteName,
@@ -10,6 +12,14 @@ import {
   websiteJsonLd,
 } from "@/lib/seo";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0F2744",
+  viewportFit: "cover",
+};
 
 const syne = Syne({
   variable: "--font-syne",
@@ -32,26 +42,31 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description: defaultDescription,
-  keywords: [
-    "SEO",
-    "social media management",
-    "Google Business Profile",
-    "web development",
-    "ecommerce",
-    "digital marketing",
-    "Hussaini IT Services",
-    "UK web agency",
-    "UAE digital marketing",
-  ],
+  keywords: defaultKeywords,
   authors: [{ name: siteName, url: siteUrl }],
   creator: siteName,
   publisher: siteName,
+  category: "technology",
+  other: {
+    "geo.region": geoLocations[0].region,
+    "geo.placename": geoLocations[0].placename,
+    "geo.position": geoLocations[0].position,
+    ICBM: geoLocations[0].icbm,
+  },
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  alternates: { canonical: siteUrl },
+  alternates: {
+    canonical: siteUrl,
+    languages: {
+      "en-GB": siteUrl,
+      "en-AE": siteUrl,
+      "en-IN": siteUrl,
+      "x-default": siteUrl,
+    },
+  },
   openGraph: {
     title: `${siteName} | Premium Web & Digital Marketing`,
     description: "Crafting digital excellence with premium web and marketing solutions.",

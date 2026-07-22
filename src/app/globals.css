@@ -48,6 +48,8 @@
 
 html {
   scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html.lenis,
@@ -72,6 +74,30 @@ body {
   color: var(--foreground);
   font-family: var(--font-dm-sans), system-ui, sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 767px) {
+  button,
+  a,
+  summary {
+    -webkit-tap-highlight-color: rgba(29, 78, 216, 0.12);
+  }
+}
+
+/* Prevent long unbroken strings from causing horizontal scroll */
+.break-safe {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 ::selection {

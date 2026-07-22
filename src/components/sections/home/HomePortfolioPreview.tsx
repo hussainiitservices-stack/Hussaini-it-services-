@@ -14,15 +14,15 @@ export function HomePortfolioPreview({ items }: HomePortfolioPreviewProps) {
   if (!items.length) return null;
 
   return (
-    <section className="relative border-t border-border py-24">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section className="relative border-t border-border py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           badge="Portfolio"
           title="Our Work Speaks for Itself"
           subtitle="Successful projects across web development, ecommerce, and digital marketing for clients worldwide."
         />
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
           {items.map((project, i) => (
             <RevealOnScroll key={project.id} delay={i * 0.08}>
               <PortfolioCard project={project} />

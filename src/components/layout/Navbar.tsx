@@ -25,6 +25,15 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
     setMobileOpen(false);
     setServicesOpen(false);
   }, [pathname]);
@@ -58,11 +67,11 @@ export function Navbar() {
       >
         <nav
           className={cn(
-            "mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-500 lg:px-8",
-            scrolled && "nav-glass rounded-lg py-3"
+            "mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-500 sm:px-6 lg:px-8",
+            scrolled && "nav-glass mx-2 rounded-lg py-3 sm:mx-4"
           )}
         >
-          <Link href="/" className="group" aria-label="Hussaini IT Services home">
+          <Link href="/" className="group min-w-0 shrink" aria-label="Hussaini IT Services home">
             <Logo size="sm" />
           </Link>
 
@@ -112,7 +121,7 @@ export function Navbar() {
 
           <button
             type="button"
-            className="lg:hidden text-foreground"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-md text-foreground lg:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
@@ -125,53 +134,64 @@ export function Navbar() {
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            id="mobile-navigation"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-x-4 top-20 z-40 nav-glass rounded-lg p-6 lg:hidden max-h-[80vh] overflow-y-auto"
-          >
-            <div className="flex flex-col gap-1">
-              <Link href="/" onClick={() => setMobileOpen(false)} className="py-2 text-muted hover:text-foreground">
-                Home
-              </Link>
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="py-2 text-muted hover:text-foreground"
-                >
-                  {link.label}
+          <>
+            <motion.button
+              type="button"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-navy/20 backdrop-blur-[2px] lg:hidden"
+              aria-label="Close menu overlay"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.div
+              id="mobile-navigation"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed inset-x-3 top-[4.5rem] z-50 max-h-[min(80vh,calc(100dvh-5.5rem))] overflow-y-auto rounded-lg nav-glass p-5 sm:inset-x-4 sm:top-20 sm:p-6 lg:hidden"
+            >
+              <div className="flex flex-col gap-1">
+                <Link href="/" onClick={() => setMobileOpen(false)} className="py-2.5 text-muted hover:text-foreground">
+                  Home
                 </Link>
-              ))}
-              <Link
-                href="/services"
-                onClick={() => setMobileOpen(false)}
-                className="py-2 text-muted hover:text-foreground"
-              >
-                Services
-              </Link>
-              <p className="mt-4 mb-2 text-xs font-semibold uppercase tracking-widest text-silver">
-                All Services
-              </p>
-              {allServices.map((service) => (
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="py-2.5 text-muted hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
                 <Link
-                  key={service.title}
                   href="/services"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 py-2 text-sm text-muted hover:text-foreground"
+                  className="py-2.5 text-muted hover:text-foreground"
                 >
-                  <service.icon size={14} className="text-accent" />
-                  {service.title}
+                  Services
                 </Link>
-              ))}
-              <MagneticButton href="/contact" variant="primary" className="mt-4 w-full">
-                Contact Us
-              </MagneticButton>
-            </div>
-          </motion.div>
+                <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-widest text-silver">
+                  All Services
+                </p>
+                {allServices.map((service) => (
+                  <Link
+                    key={service.title}
+                    href="/services"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 py-2.5 text-sm text-muted hover:text-foreground"
+                  >
+                    <service.icon size={14} className="shrink-0 text-accent" />
+                    {service.title}
+                  </Link>
+                ))}
+                <MagneticButton href="/contact" variant="primary" className="mt-4 w-full">
+                  Contact Us
+                </MagneticButton>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

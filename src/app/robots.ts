@@ -6,7 +6,12 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/llm.txt", "/sitemap.txt"],
+        disallow: ["/admin/", "/api/"],
+      },
+      {
+        userAgent: ["GPTBot", "ChatGPT-User", "ClaudeBot", "Google-Extended", "PerplexityBot"],
+        allow: ["/", "/llm.txt", "/sitemap.txt"],
         disallow: ["/admin/", "/api/"],
       },
     ],

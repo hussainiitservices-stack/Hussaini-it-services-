@@ -21,6 +21,9 @@ function ServicePreviewCard({
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-4, 4]), { stiffness: 300, damping: 30 });
 
   const handleMouse = (e: React.MouseEvent) => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+      return;
+    }
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -54,15 +57,15 @@ function ServicePreviewCard({
 
 export function HomeServicesPreview() {
   return (
-    <section className="relative border-t border-border bg-surface py-24">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section className="relative border-t border-border bg-surface py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           badge="Services"
           title="What We Offer"
           subtitle="Focused digital marketing and web solutions to grow your brand, improve visibility, and drive measurable results."
         />
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {featuredServices.map((service, i) => (
             <ServicePreviewCard key={service.title} service={service} index={i} />
           ))}

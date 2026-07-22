@@ -3,9 +3,10 @@ import { SiteLayout } from "@/components/layout/SiteLayout";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
-  title: "Page Not Found | Hussaini IT Services",
-  description: "The page you are looking for could not be found.",
+  title: "Page Not Found",
+  description: "The page you are looking for could not be found on Hussaini IT Services.",
   path: "/404",
+  noindex: true,
 });
 
 export default function NotFound() {

@@ -23,6 +23,10 @@ export function MagneticButton({
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleMouse = (e: React.MouseEvent) => {
+    // Skip magnetic effect on touch / coarse pointers
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+      return;
+    }
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -47,7 +51,7 @@ export function MagneticButton({
       animate={{ x: position.x, y: position.y }}
       transition={{ type: "spring", stiffness: 150, damping: 15 }}
       className={cn(
-        "relative inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-sm font-semibold tracking-wide transition-colors duration-300 cursor-pointer",
+        "relative inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-6 py-3.5 text-sm font-semibold tracking-wide transition-colors duration-300 cursor-pointer sm:px-8 sm:py-4",
         variants[variant],
         className
       )}
@@ -55,13 +59,13 @@ export function MagneticButton({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      <span className="relative z-10 flex items-center gap-2">{children}</span>
+      <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>
     </motion.div>
   );
 
   if (href) {
     return (
-      <a href={href} className="inline-block">
+      <a href={href} className={cn("inline-block", className?.includes("w-full") && "w-full")}>
         {content}
       </a>
     );

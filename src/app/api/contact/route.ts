@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/server";
+import { sendContactNotificationEmail } from "@/lib/email/contact-notification";
 import type { ContactFormData } from "@/lib/types/database";
 
 export async function POST(request: Request) {
@@ -20,43 +20,50 @@ export async function POST(request: Request) {
     }
 
     const supabase = createAdminClient();
-    if (supabase) {
-      await supabase.from("contact_submissions").insert({
-        name: body.name.trim(),
-        email: body.email.trim(),
-        phone: body.phone?.trim() || null,
-        subject: body.subject?.trim() || null,
-        message: body.message.trim(),
-      });
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Contact service is not configured. Please try again later." },
+        { status: 503 }
+      );
     }
 
-    const resendKey = process.env.RESEND_API_KEY;
-    const toEmail = process.env.CONTACT_EMAIL || "hello@hussainitservices.com";
+    const submission = {
+      name: body.name.trim(),
+      email: body.email.trim(),
+      phone: body.phone?.trim() || null,
+      subject: body.subject?.trim() || null,
+      message: body.message.trim(),
+    };
 
-    if (resendKey) {
-      const resend = new Resend(resendKey);
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "Hussaini IT Services <onboarding@resend.dev>",
-        to: toEmail,
-        replyTo: body.email,
-        subject: body.subject?.trim()
-          ? `Contact: ${body.subject.trim()}`
-          : `New inquiry from ${body.name}`,
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${body.name}</p>
-          <p><strong>Email:</strong> ${body.email}</p>
-          ${body.phone ? `<p><strong>Phone:</strong> ${body.phone}</p>` : ""}
-          ${body.subject ? `<p><strong>Subject:</strong> ${body.subject}</p>` : ""}
-          <p><strong>Message:</strong></p>
-          <p>${body.message.replace(/\n/g, "<br>")}</p>
-        `,
+    const { error: dbError } = await supabase.from("contact_submissions").insert(submission);
+
+    if (dbError) {
+      console.error("Contact DB error:", dbError.message);
+      return NextResponse.json(
+        { error: "Failed to save your message. Please try again or email us directly." },
+        { status: 500 }
+      );
+    }
+
+    let emailSent = false;
+    try {
+      const emailResult = await sendContactNotificationEmail({
+        name: submission.name,
+        email: submission.email,
+        phone: submission.phone ?? undefined,
+        subject: submission.subject ?? undefined,
+        message: submission.message,
       });
+      emailSent = emailResult.sent;
+    } catch (emailError) {
+      console.error("Contact email error:", emailError);
     }
 
     return NextResponse.json({
       success: true,
-      message: "Thank you! Your message has been sent successfully.",
+      message: emailSent
+        ? "Thank you! Your message has been sent successfully."
+        : "Thank you! Your message was received. We will get back to you soon.",
     });
   } catch (error) {
     console.error("Contact form error:", error);

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Plus, Trash2, Loader2, MessageSquare, Briefcase, Star, Pencil, X } from "lucide-react";
+import { LogOut, Plus, Trash2, Loader2, MessageSquare, Briefcase, Star, Pencil, X, Mail, RefreshCw } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { PortfolioImageUpload } from "@/components/admin/PortfolioImageUpload";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
@@ -26,7 +26,10 @@ export default function AdminDashboard() {
   const [editingPortfolio, setEditingPortfolio] = useState<DbPortfolio | null>(null);
   const [testimonialLogoUrl, setTestimonialLogoUrl] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<
-    { type: "testimonial"; id: string; label: string } | { type: "portfolio"; id: string; label: string } | null
+    | { type: "testimonial"; id: string; label: string }
+    | { type: "portfolio"; id: string; label: string }
+    | { type: "contact"; id: string; label: string }
+    | null
   >(null);
   const [deleting, setDeleting] = useState(false);
 
@@ -210,6 +213,14 @@ export default function AdminDashboard() {
     });
   }
 
+  function requestDeleteContact(item: DbContactSubmission) {
+    setDeleteTarget({
+      type: "contact",
+      id: item.id,
+      label: item.name,
+    });
+  }
+
   async function confirmDelete() {
     if (!deleteTarget) return;
 
@@ -219,7 +230,9 @@ export default function AdminDashboard() {
     const endpoint =
       deleteTarget.type === "testimonial"
         ? "/api/admin/testimonials"
-        : "/api/admin/portfolio";
+        : deleteTarget.type === "portfolio"
+          ? "/api/admin/portfolio"
+          : "/api/admin/contacts";
 
     try {
       const res = await fetch(endpoint, {
@@ -254,9 +267,9 @@ export default function AdminDashboard() {
     "w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none";
 
   const tabs = [
-    { id: "testimonials" as Tab, label: "Testimonials", icon: Star },
-    { id: "portfolio" as Tab, label: "Portfolio", icon: Briefcase },
-    { id: "contacts" as Tab, label: "Contact Messages", icon: MessageSquare },
+    { id: "testimonials" as Tab, label: "Testimonials", icon: Star, count: testimonials.length },
+    { id: "portfolio" as Tab, label: "Portfolio", icon: Briefcase, count: portfolio.length },
+    { id: "contacts" as Tab, label: "Contact Messages", icon: MessageSquare, count: contacts.length },
   ];
 
   return (
@@ -279,19 +292,24 @@ export default function AdminDashboard() {
 
       <div className="mx-auto max-w-6xl px-6 py-8">
         <h1 className="sr-only">Admin Dashboard</h1>
-        <div className="flex gap-2 mb-8 border-b border-border pb-4">
+        <div className="mb-8 flex gap-2 overflow-x-auto border-b border-border pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`inline-flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors sm:px-4 ${
                 tab === t.id
                   ? "bg-accent text-white"
-                  : "text-muted hover:text-foreground hover:bg-surface"
+                  : "text-muted hover:bg-surface hover:text-foreground"
               }`}
             >
               <t.icon size={16} />
               {t.label}
+              {t.id === "contacts" && t.count > 0 && (
+                <span className="ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-white/20 px-1.5 py-0.5 text-xs font-bold">
+                  {t.count}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -519,25 +537,74 @@ export default function AdminDashboard() {
             )}
 
             {tab === "contacts" && (
-              <div className="space-y-3">
-                <h2 className="font-display text-lg font-bold mb-2">Contact Submissions ({contacts.length})</h2>
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="font-display text-lg font-bold">
+                      Contact Submissions ({contacts.length})
+                    </h2>
+                    <p className="text-sm text-muted mt-1">
+                      New inquiries from the website contact form appear here automatically.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={loadData}
+                    disabled={loading}
+                    className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors disabled:opacity-50"
+                  >
+                    <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                    Refresh
+                  </button>
+                </div>
+
                 {contacts.length === 0 && (
-                  <p className="text-muted text-sm">No contact submissions yet.</p>
+                  <div className="premium-card rounded-lg p-6 text-sm text-muted">
+                    No contact submissions yet. Submit a test message from the{" "}
+                    <a href="/contact" className="text-accent hover:underline" target="_blank" rel="noreferrer">
+                      contact page
+                    </a>
+                    .
+                  </div>
                 )}
+
                 {contacts.map((c) => (
-                  <div key={c.id} className="premium-card rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-2">
+                  <div key={c.id} className="premium-card rounded-lg p-5">
+                    <div className="flex flex-wrap justify-between items-start gap-3 mb-3">
                       <div>
-                        <p className="font-semibold">{c.name}</p>
-                        <p className="text-sm text-accent">{c.email}</p>
+                        <p className="font-semibold text-base">{c.name}</p>
+                        <a
+                          href={`mailto:${c.email}?subject=${encodeURIComponent(`Re: ${c.subject || "Your inquiry to Hussaini IT Services"}`)}`}
+                          className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline mt-1"
+                        >
+                          <Mail size={14} />
+                          {c.email}
+                        </a>
                       </div>
-                      <p className="text-xs text-muted">
-                        {new Date(c.created_at).toLocaleDateString()}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs text-muted whitespace-nowrap">
+                          {new Date(c.created_at).toLocaleString()}
+                        </p>
+                        <button
+                          onClick={() => requestDeleteContact(c)}
+                          className="text-red-400 hover:text-red-300"
+                          aria-label="Delete contact message"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </div>
-                    {c.phone && <p className="text-sm text-muted">Phone: {c.phone}</p>}
-                    {c.subject && <p className="text-sm text-muted">Subject: {c.subject}</p>}
-                    <p className="text-sm text-muted mt-2">{c.message}</p>
+
+                    {(c.phone || c.subject) && (
+                      <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted mb-3">
+                        {c.phone && <p><span className="font-medium text-foreground">Phone:</span> {c.phone}</p>}
+                        {c.subject && <p><span className="font-medium text-foreground">Subject:</span> {c.subject}</p>}
+                      </div>
+                    )}
+
+                    <div className="rounded-md bg-surface border border-border px-4 py-3">
+                      <p className="text-sm text-muted whitespace-pre-wrap">{c.message}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -551,7 +618,9 @@ export default function AdminDashboard() {
         title={
           deleteTarget?.type === "testimonial"
             ? "Delete testimonial?"
-            : "Delete portfolio project?"
+            : deleteTarget?.type === "portfolio"
+              ? "Delete portfolio project?"
+              : "Delete contact message?"
         }
         message={
           deleteTarget
