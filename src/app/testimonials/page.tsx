@@ -6,6 +6,8 @@ import { fetchTestimonials } from "@/lib/data/fetch";
 import { createPageMetadata } from "@/lib/seo";
 import { breadcrumbJsonLd, testimonialsItemListJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = createPageMetadata({
   title: "Client Testimonials & Reviews",
   description:

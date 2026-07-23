@@ -4,6 +4,8 @@ import { fetchPortfolio, fetchTestimonials } from "@/lib/data/fetch";
 import { createPageMetadata } from "@/lib/seo";
 import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = createPageMetadata({
   title: "Premium Web Development, SEO & Digital Marketing",
   description:

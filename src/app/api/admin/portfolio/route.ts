@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/server";
+import { revalidatePublicContent } from "@/lib/admin/revalidate";
 import type { DbPortfolio } from "@/lib/types/database";
 
 function isMissingColumnError(message: string) {
@@ -82,6 +83,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: result.error.message }, { status: 500 });
     }
 
+    revalidatePublicContent();
+
     return NextResponse.json({
       data: normalizePortfolioRow(result.data as Record<string, unknown>),
     });
@@ -134,6 +137,8 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: result.error.message }, { status: 500 });
     }
 
+    revalidatePublicContent();
+
     return NextResponse.json({
       data: normalizePortfolioRow(result.data as Record<string, unknown>),
     });
@@ -157,6 +162,8 @@ export async function DELETE(request: Request) {
       console.error("Portfolio DELETE error:", error.message);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    revalidatePublicContent();
 
     return NextResponse.json({ success: true });
   } catch (error) {

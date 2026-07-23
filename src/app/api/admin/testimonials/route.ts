@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/server";
+import { revalidatePublicContent } from "@/lib/admin/revalidate";
 import {
   buildTestimonialBasePayload,
   buildTestimonialPayload,
@@ -62,6 +63,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: result.error.message }, { status: 500 });
     }
 
+    revalidatePublicContent();
+
     return NextResponse.json({
       data: normalizeTestimonialRow(result.data as Record<string, unknown>),
     });
@@ -102,6 +105,8 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: result.error.message }, { status: 500 });
     }
 
+    revalidatePublicContent();
+
     return NextResponse.json({
       data: normalizeTestimonialRow(result.data as Record<string, unknown>),
     });
@@ -125,6 +130,8 @@ export async function DELETE(request: Request) {
       console.error("Testimonials DELETE error:", error.message);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    revalidatePublicContent();
 
     return NextResponse.json({ success: true });
   } catch (error) {
