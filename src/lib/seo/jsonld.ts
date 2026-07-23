@@ -105,11 +105,24 @@ export function contactPageJsonLd() {
       url: siteUrl,
       email: companyInfo.email,
       telephone: companyInfo.phone,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: companyInfo.location,
-        addressCountry: "GB",
-      },
+      address: [
+        {
+          "@type": "PostalAddress",
+          addressLocality: "Dubai",
+          addressCountry: "AE",
+        },
+        {
+          "@type": "PostalAddress",
+          addressLocality: "Ujjain",
+          addressRegion: "Madhya Pradesh",
+          addressCountry: "IN",
+        },
+      ],
+      sameAs: [
+        companyInfo.socials.linkedin,
+        companyInfo.socials.instagram,
+        companyInfo.socials.facebook,
+      ],
     },
   };
 }

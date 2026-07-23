@@ -290,9 +290,24 @@ export const technologies = [
 
 export const companyInfo = {
   name: "Hussaini IT Services",
-  email: "hello@hussainitservices.com",
-  phone: "+971 56 524 2459",
-  location: "High Wycombe, UK & Ujjain, India",
+  email: "Info@hussainiitservices.com",
+  phone: "+91 7024951915",
+  phones: [
+    { label: "India", display: "+91 7024951915", href: "tel:+917024951915" },
+    { label: "UAE", display: "+971 55 365 9826", href: "tel:+971553659826" },
+  ],
+  whatsapp: {
+    display: "+91 7024951915",
+    href: "https://wa.me/917024951915",
+  },
+  location: "Dubai, UAE & Ujjain, India",
+  locations: ["Dubai, UAE", "Ujjain, Madhya Pradesh, India"],
   // Must match the primary domain used in Google Search Console (www)
   website: "https://www.hussainiitservices.com",
+  socials: {
+    linkedin: "https://www.linkedin.com/company/hussaini-it-services/",
+    instagram: "https://www.instagram.com/hussaini_it_services/",
+    facebook: "https://www.facebook.com/profile.php?id=61588450138978",
+    whatsapp: "https://wa.me/917024951915",
+  },
 };

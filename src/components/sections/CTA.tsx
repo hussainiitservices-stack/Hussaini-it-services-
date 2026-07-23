@@ -41,13 +41,19 @@ export function CTA() {
               </MagneticButton>
             </div>
 
-            <a
-              href={`tel:${companyInfo.phone.replace(/\s/g, "")}`}
-              className="inline-flex items-center justify-center gap-2 text-sm text-muted transition-colors hover:text-accent sm:text-base"
-            >
-              <Phone size={16} />
-              Call Us: {companyInfo.phone}
-            </a>
+            <div className="flex flex-col items-center gap-2 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
+              {companyInfo.phones.map((phone) => (
+                <a
+                  key={phone.href}
+                  href={phone.href}
+                  className="inline-flex items-center justify-center gap-2 text-sm text-muted transition-colors hover:text-accent sm:text-base"
+                >
+                  <Phone size={16} />
+                  {phone.display}
+                  <span className="text-xs text-muted/70">({phone.label})</span>
+                </a>
+              ))}
+            </div>
           </div>
         </RevealOnScroll>
       </div>

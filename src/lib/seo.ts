@@ -45,11 +45,11 @@ export const defaultKeywords = [
 
 export const geoLocations = [
   {
-    name: "High Wycombe, United Kingdom",
-    region: "GB-BKM",
-    placename: "High Wycombe",
-    position: "51.6286;-0.7482",
-    icbm: "51.6286, -0.7482",
+    name: "Dubai, United Arab Emirates",
+    region: "AE-DU",
+    placename: "Dubai",
+    position: "25.2048;55.2708",
+    icbm: "25.2048, 55.2708",
   },
   {
     name: "Ujjain, India",
@@ -151,16 +151,14 @@ export function organizationJsonLd() {
     telephone: companyInfo.phone,
     description: defaultDescription,
     areaServed: [
-      { "@type": "Country", name: "United Kingdom" },
       { "@type": "Country", name: "United Arab Emirates" },
       { "@type": "Country", name: "India" },
     ],
     address: [
       {
         "@type": "PostalAddress",
-        addressLocality: "High Wycombe",
-        addressRegion: "Buckinghamshire",
-        addressCountry: "GB",
+        addressLocality: "Dubai",
+        addressCountry: "AE",
       },
       {
         "@type": "PostalAddress",
@@ -169,15 +167,20 @@ export function organizationJsonLd() {
         addressCountry: "IN",
       },
     ],
-    contactPoint: {
+    contactPoint: companyInfo.phones.map((phone) => ({
       "@type": "ContactPoint",
-      telephone: companyInfo.phone,
+      telephone: phone.display,
       email: companyInfo.email,
       contactType: "customer service",
-      areaServed: ["GB", "AE", "IN"],
+      areaServed: phone.label === "India" ? "IN" : "AE",
       availableLanguage: ["English", "Hindi"],
-    },
-    sameAs: [companyInfo.website],
+    })),
+    sameAs: [
+      companyInfo.website,
+      companyInfo.socials.linkedin,
+      companyInfo.socials.instagram,
+      companyInfo.socials.facebook,
+    ],
   };
 }
 
@@ -208,21 +211,27 @@ export function localBusinessJsonLd() {
     email: companyInfo.email,
     telephone: companyInfo.phone,
     priceRange: "$$",
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 51.6286,
-      longitude: -0.7482,
-    },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "High Wycombe",
-      addressRegion: "Buckinghamshire",
-      addressCountry: "GB",
-    },
+    address: [
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Dubai",
+        addressCountry: "AE",
+      },
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Ujjain",
+        addressRegion: "Madhya Pradesh",
+        addressCountry: "IN",
+      },
+    ],
     areaServed: [
-      { "@type": "Country", name: "United Kingdom" },
       { "@type": "Country", name: "United Arab Emirates" },
       { "@type": "Country", name: "India" },
+    ],
+    sameAs: [
+      companyInfo.socials.linkedin,
+      companyInfo.socials.instagram,
+      companyInfo.socials.facebook,
     ],
     serviceType: [
       "Web Development",

@@ -53,37 +53,50 @@ export default function ContactPage() {
                 <h2 className="mb-6 font-display text-xl font-bold sm:text-2xl">Get in Touch</h2>
                 <ul className="space-y-6">
                   <li className="flex items-start gap-4">
-                    <div className="icon-box h-10 w-10">
+                    <div className="icon-box h-10 w-10 shrink-0">
                       <MapPin size={18} />
                     </div>
                     <div>
-                      <p className="font-medium mb-1">Location</p>
-                      <p className="text-sm text-muted">{companyInfo.location}</p>
+                      <p className="mb-1 font-medium">Locations</p>
+                      {companyInfo.locations.map((loc) => (
+                        <p key={loc} className="text-sm text-muted">
+                          {loc}
+                        </p>
+                      ))}
                     </div>
                   </li>
                   <li className="flex items-start gap-4">
-                    <div className="icon-box h-10 w-10">
+                    <div className="icon-box h-10 w-10 shrink-0">
                       <Mail size={18} />
                     </div>
                     <div>
-                      <p className="font-medium mb-1">Email</p>
-                      <a href={`mailto:${companyInfo.email}`} className="text-sm text-accent hover:underline">
+                      <p className="mb-1 font-medium">Email</p>
+                      <a
+                        href={`mailto:${companyInfo.email}`}
+                        className="break-all text-sm text-accent hover:underline"
+                      >
                         {companyInfo.email}
                       </a>
                     </div>
                   </li>
                   <li className="flex items-start gap-4">
-                    <div className="icon-box h-10 w-10">
+                    <div className="icon-box h-10 w-10 shrink-0">
                       <Phone size={18} />
                     </div>
                     <div>
-                      <p className="font-medium mb-1">Phone</p>
-                      <a
-                        href={`tel:${companyInfo.phone.replace(/\s/g, "")}`}
-                        className="text-sm text-accent hover:underline"
-                      >
-                        {companyInfo.phone}
-                      </a>
+                      <p className="mb-1 font-medium">Phone</p>
+                      <div className="space-y-1">
+                        {companyInfo.phones.map((phone) => (
+                          <a
+                            key={phone.href}
+                            href={phone.href}
+                            className="block text-sm text-accent hover:underline"
+                          >
+                            {phone.display}
+                            <span className="ml-1 text-muted">({phone.label})</span>
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   </li>
                 </ul>

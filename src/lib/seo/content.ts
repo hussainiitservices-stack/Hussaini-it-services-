@@ -27,11 +27,11 @@ export const serviceFaqs = [
 export const contactFaqs = [
   {
     question: "How can I contact Hussaini IT Services?",
-    answer: `Email ${companyInfo.email}, call ${companyInfo.phone}, or use the contact form at ${siteUrl}/contact.`,
+    answer: `Email ${companyInfo.email}, call ${companyInfo.phones.map((p) => p.display).join(" or ")}, WhatsApp ${companyInfo.whatsapp.display}, or use the contact form at ${siteUrl}/contact.`,
   },
   {
     question: "Where is Hussaini IT Services located?",
-    answer: `${companyInfo.name} operates from ${companyInfo.location}, serving clients in the UK, UAE, India, and internationally.`,
+    answer: `${companyInfo.name} operates from ${companyInfo.locations.join(" and ")}, serving clients in the UAE, India, and internationally.`,
   },
   {
     question: "How quickly will you respond to a project inquiry?",
@@ -60,9 +60,14 @@ ${siteName} builds professional websites, ecommerce stores, and digital marketin
 ## Contact
 - Website: ${siteUrl}
 - Email: ${companyInfo.email}
-- Phone: ${companyInfo.phone}
-- Locations: ${companyInfo.location}
-- Service areas: United Kingdom, United Arab Emirates, India, Worldwide (remote)
+- Phone (India): ${companyInfo.phones[0].display}
+- Phone (UAE): ${companyInfo.phones[1].display}
+- WhatsApp: ${companyInfo.whatsapp.display}
+- Locations: ${companyInfo.locations.join("; ")}
+- LinkedIn: ${companyInfo.socials.linkedin}
+- Instagram: ${companyInfo.socials.instagram}
+- Facebook: ${companyInfo.socials.facebook}
+- Service areas: United Arab Emirates, India, Worldwide (remote)
 
 ## Key Pages
 ${pageLines}
